@@ -1,0 +1,10 @@
+#[program:{{ application_name }}]
+#command = {{ virtualenv_path }}/bin/gunicorn_start
+#user = {{ gunicorn_user }}
+#stdout_logfile = {{ application_log_file }}
+#redirect_stderr = true
+
+[program:tilestache]
+command = {{ virtualenv_path }}/bin/tiling_gunicorn_start
+autostart=True
+autorestart=True
