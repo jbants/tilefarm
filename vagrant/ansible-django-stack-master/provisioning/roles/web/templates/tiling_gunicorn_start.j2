@@ -1,7 +1,7 @@
 #!/bin/sh
 
 NAME="tilestache_app" # Name of the application
-NUM_WORKERS=3 # how many worker processes should Gunicorn spawn
+NUM_WORKERS={{ gunicorn_num_workers }} # how many worker processes should Gunicorn spawn
 IP=0.0.0.0 # ip address to run on
 PORT=8083 # port to run on
 CONFIG_DIR={{ project_path }}
