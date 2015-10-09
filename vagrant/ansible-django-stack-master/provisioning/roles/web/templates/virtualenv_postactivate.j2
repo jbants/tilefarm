@@ -3,3 +3,6 @@
 {% for variable_name, value in django_environment.iteritems() %}
 export {{ variable_name }}="{{ value }}"
 {% endfor %}
+
+export WORKON_HOME={{ virtualenv_path }}/bin/activate
+source /usr/local/bin/virtualenvwrapper.sh

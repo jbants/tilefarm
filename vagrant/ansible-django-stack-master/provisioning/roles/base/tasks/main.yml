@@ -1,16 +1,4 @@
 ---
-
-- include: create_swap_file.yml
-  when: create_swap_file
-  tags: swap
-  
-- name: Update apt with postgres 94
-  apt_repository: repo='deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main' state=present
-  tags: packages
-  
-- name: Update apt with postgres 94 key
-  apt_key: url=https://www.postgresql.org/media/keys/ACCC4CF8.asc state=present
-  tags: packages
     
 - name: Ensure bash, OpenSSl, and libssl are the latest versions
   apt: name={{ item }} update_cache={{ update_apt_cache }} state=latest
@@ -40,9 +28,9 @@
 
   tags: packages
 
-#- name: Create a Mapping Directory
-#  file: path=/home/{{ user_name }}/webapps/tile_farm state=directory
-#  tags: packages
+- name: Create a Mapping Directory
+  file: path=/webapps/tilefarm/configs state=directory
+  tags: packages
   
 - name: install virtual env
   pip: name={{ item }}

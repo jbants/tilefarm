@@ -13,9 +13,9 @@
     - env_vars/vagrant.yml
 
   roles:
-    - base
-    - db
-    - rabbitmq
-    - tilestache
-    - web
-    - celery
+    - base #checked
+    - db #checked
+    - rabbitmq #checked
+    - tilestache #checked
+    - web #checked 
+    #- celery

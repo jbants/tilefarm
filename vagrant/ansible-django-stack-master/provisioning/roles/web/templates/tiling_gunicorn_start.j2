@@ -17,7 +17,7 @@ cd $CONFIG_DIR
 . {{ virtualenv_path }}/bin/activate
 
 # Programs meant to be run under supervisor should not daemonize themselves (do not use --daemon)
-{{ virtualenv_path }}/bin/gunicorn "TileStache:WSGITileServer('{{ virtualenv_path }}/tilestache.cfg')" \
+{{ virtualenv_path }}/bin/gunicorn "TileStache:WSGITileServer('{{ tilefarm_path }}/configs/tilestache.cfg')" \
 --bind $IP:$PORT \
 --name $NAME 
 --workers $NUM_WORKERS \
