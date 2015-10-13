@@ -1,0 +1,13 @@
+---
+
+  - name: Change owner
+    command: chown -R {{ gunicorn_user }}:{{ gunicorn_group }} /webapps/
+    
+  - name: Update bashrc for user
+    lineinfile:
+      dest=/home/{{ gunicorn_user }}/.bashrc
+      line="export WORKON_HOME=/virtualenv/ && source /usr/local/bin/virtualenvwrapper.sh"
+      owner={{ gunicorn_user }}
+      state=present
+      insertafter=EOF
+      create=True
