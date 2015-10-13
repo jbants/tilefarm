@@ -29,8 +29,16 @@
   tags: packages
 
 - name: Create a Mapping Directory
-  file: path=/webapps/tilefarm/configs state=directory
+  file: path=/webapps/tilefarm/configs 
+        state=directory
+        mode=0755
   tags: packages
+
+- name: Create a Website Directory
+  file: path=/webapps/website
+        state=directory
+        mode=0755
+  tags: packages  
   
 - name: install virtual env
   pip: name={{ item }}

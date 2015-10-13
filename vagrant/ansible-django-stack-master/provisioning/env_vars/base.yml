@@ -1,10 +1,16 @@
 ---
 
-git_repo: https://github.com/jcalazan/youtube-audio-dl.git
+git_repo: https://github.com/jbants/django_caramel.git
 
-project_name: youtube-audio-dl
-application_name: youtubeadl
-virtualenv_path: "/webapps/{{ application_name }}"
+project_name: blusteel
+application_name: webuser
+application_password: webuser
+
+gunicorn_user: "{{ application_name }}"
+gunicorn_password: "{{ application_password }}"
+
+virtualenv_name: website
+virtualenv_path: "/virtualenv/{{ virtualenv_name }}"
 tilefarm_path: "/webapps/tilefarm"
 
 ssl_dest_dir: /etc/ssl

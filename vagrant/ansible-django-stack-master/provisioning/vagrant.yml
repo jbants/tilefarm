@@ -18,4 +18,5 @@
     - rabbitmq #checked
     - tilestache #checked
     - web #checked 
+    - cleanup
     #- celery
