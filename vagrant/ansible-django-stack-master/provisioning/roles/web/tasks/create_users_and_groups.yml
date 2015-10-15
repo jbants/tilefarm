@@ -1,7 +1,7 @@
 ---
 
 - name: Create the application user
-  user: name={{ gunicorn_user }} password={{ gunicorn_password | password_hash('sha512') }} state=present
+  user: name={{ gunicorn_user }} password={{ gunicorn_password }} state=present
 
 - name: Create the application group
   group: name={{ gunicorn_group }} system=yes state=present

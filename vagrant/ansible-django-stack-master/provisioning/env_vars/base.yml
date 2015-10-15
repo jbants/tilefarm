@@ -4,7 +4,7 @@ git_repo: https://github.com/jbants/django_caramel.git
 
 project_name: blusteel
 application_name: webuser
-application_password: webuser
+application_password: $1$salty$SzJsU4qDcXp536Acnlp6I. #password see: https://github.com/ansible/ansible/issues/2305
 
 gunicorn_user: "{{ application_name }}"
 gunicorn_password: "{{ application_password }}"
