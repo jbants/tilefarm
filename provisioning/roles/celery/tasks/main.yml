@@ -1,6 +1,11 @@
 ---
 
-- include: copy_scripts.yml
+- name: install celery
+  pip: virtualenv={{ virtualenv_path }} name={{ item }} virtualenv_site_packages=yes
+  with_items:
+    - celery
+
+#- include: copy_scripts.yml
 
 - include: setup_supervisor.yml
 

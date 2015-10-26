@@ -2,16 +2,21 @@
 
 git_repo: https://github.com/jbants/django_caramel.git
 
-project_name: blusteel
+project_name: bluesteel
 application_name: webuser
+application_group : webapps
 application_password: $1$salty$SzJsU4qDcXp536Acnlp6I. #password see: https://github.com/ansible/ansible/issues/2305
+
+mapping_directory: "/webapps/tilefarm"
+website_directory: "/webapps/website"
+logs_directory: "/webapps/logs"
 
 gunicorn_user: "{{ application_name }}"
 gunicorn_password: "{{ application_password }}"
 
 virtualenv_name: website
 virtualenv_path: "/virtualenv/{{ virtualenv_name }}"
-tilefarm_path: "/webapps/tilefarm"
+#tilefarm_path: "/webapps/tilefarm"
 
 ssl_dest_dir: /etc/ssl
 

@@ -8,12 +8,3 @@
         state=directory
   tags:
     - celery
-
-- name: Create the {{ celery_application_name }} script file
-  template: src={{ celery_template_file }}
-            dest={{ celery_scripts_dir }}/{{ celery_application_name }}_start
-            owner={{ celery_user }}
-            group={{ celery_group }}
-            mode=0755
-  tags:
-    - celery

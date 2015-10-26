@@ -15,4 +15,4 @@
   - name: Copy across new tilestache config file
     template:
       src=tilestache.cfg.j2
-      dest={{ tilefarm_path }}/configs/tilestache.cfg
+      dest={{ mapping_directory }}/configs/tilestache.cfg

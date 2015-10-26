@@ -8,3 +8,27 @@
 command = {{ virtualenv_path }}/bin/tiling_gunicorn_start
 autostart=True
 autorestart=True
+
+#[program:{{ celery_application_name }}]
+#command={{ virtualenv_path }}/bin/celery -A {{ application_name }} worker -l INFO --concurrency={{ celery_num_workers }}
+#directory=/webapps/website/{{ application_name }}
+#user={{ celery_user }}
+#numprocs=1
+#stdout_logfile={{ celery_log_file }}
+#stderr_logfile={{ celery_log_file }}
+#autostart=true
+#autorestart=true
+#startsecs=10
+
+#; Need to wait for currently executing tasks to finish at shutdown.
+#; Increase this if you have very long running tasks.
+#stopwaitsecs = 600
+
+#; When resorting to send SIGKILL to the program to terminate it
+#; send SIGKILL to its whole process group instead,
+#; taking care of its children as well.
+#killasgroup=true
+
+#; if rabbitmq is supervised, set its priority higher
+#; so it starts first
+#priority=998
