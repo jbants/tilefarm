@@ -43,7 +43,6 @@ ssl_crt: |
   /2gucKfZufEhaPL159OVt5fctnRrFySyDmzQX5z2oVWTrTE83huTRc87XQK1QcYH
   +w==
   -----END CERTIFICATE-----
-
 # This key is for demo purposes only. If you're committing your keys
 # to your git repo, you'd probably want it encrypted. You can use
 # ansible-vault to do this.

@@ -1,13 +1,15 @@
 #[program:{{ application_name }}]
 #command = {{ virtualenv_path }}/bin/gunicorn_start
 #user = {{ gunicorn_user }}
-#stdout_logfile = {{ application_log_file }}
+#stdout_logfile = {{ django_log_file }}
 #redirect_stderr = true
 
 [program:tilestache]
 command = {{ virtualenv_path }}/bin/tiling_gunicorn_start
 autostart=True
 autorestart=True
+stdout_logfile = {{ tilestache_access_log }}
+stderr_logfile = {{ tilestache_error_log }}
 
 #[program:{{ celery_application_name }}]
 #command={{ virtualenv_path }}/bin/celery -A {{ application_name }} worker -l INFO --concurrency={{ celery_num_workers }}

@@ -1,17 +1,21 @@
 ---
 
   - name: install pillow version 2.9
-    pip: virtualenv={{ virtualenv_path }} name=pillow version=2.9.0 virtualenv_site_packages=yes
+    pip: virtualenv={{ virtualenv_path }}
+         name=pillow version=2.9.0
+         virtualenv_site_packages=yes
 
   - name: install tilestache and related dependancies
-    pip: virtualenv={{ virtualenv_path }} name={{ item }} virtualenv_site_packages=yes
+    pip: virtualenv={{ virtualenv_path }}
+         name={{ item }}
+         virtualenv_site_packages=yes
     with_items:
       - modestmaps
       - simplejson
       - shapely
       - werkzeug
       - tilestache
-    
+
   - name: Copy across new tilestache config file
     template:
       src=tilestache.cfg.j2

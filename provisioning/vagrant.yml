@@ -16,8 +16,8 @@
     - base #checked
     - db #checked
     - rabbitmq #checked
-    - tilestache #checked   
-    - web 
-    - celery     
+    - tilestache #checked
+    - web #checked
+    - celery #checked   
     - cleanup
     #- memcached

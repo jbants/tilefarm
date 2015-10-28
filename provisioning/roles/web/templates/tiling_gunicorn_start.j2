@@ -21,4 +21,6 @@ cd $CONFIG_DIR
 --bind $IP:$PORT \
 --name $NAME 
 --workers $NUM_WORKERS \
---log-level=info
+--log-level=info \
+--log-file={{ tilestache_log_file }} \
+--access-logfile={{ tilestache_access_file }}
