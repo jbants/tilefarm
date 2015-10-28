@@ -1,26 +1,26 @@
 ---
 
   - name: Change owner
-    command: chown -R :"{{ gunicorn_group }}" /webapps/
+    command: chown -R :{{ gunicorn_group }} /webapps/
 
   - name: modify owner
-    command: chmod g+s "{{ website_directory }}"
+    command: chmod g+s {{ website_directory }}
 
   - name: Adding user vagrant
     user: name=vagrant group="{{ gunicorn_group }}" append=yes
 
   - name: change permissions
-    command: setfacl -Rdm u:webuser:rwx,g:"{{ gunicorn_group }}":rwx /webapps/
+    command: setfacl -Rdm u:webuser:rwx,g:{{ gunicorn_group }}:rwx /webapps/
     sudo: yes
 
   - name: change permissions
-    command: setfacl -Rm u:webuser:rwx,g:"{{ gunicorn_group }}":rwx /webapps/
+    command: setfacl -Rm u:webuser:rwx,g:{{ gunicorn_group }}:rwx /webapps/
     sudo: yes
 
 
   - name: Update bashrc for user
     lineinfile:
-      dest=/home/{"{ gunicorn_user }}"/.bashrc
+      dest="/home/{{ gunicorn_user }}/.bashrc"
       line="export WORKON_HOME=/virtualenv/ && source /usr/local/bin/virtualenvwrapper.sh"
       owner="{{ gunicorn_user }}"
       state=present
