@@ -32,6 +32,21 @@
         mode=0774
         state=directory
 
+- name: Create the nginx log folder
+  file: path="{{ logs_directory }}/nginx"
+        owner="{{ gunicorn_user }}"
+        group="{{ gunicorn_group }}"
+        mode=0774
+        state=directory
+
+- name: Create the nginx error log file
+  command: touch "{{ nginx_log_file }}"
+           creates="{{ nginx_log_file }}"
+
+- name: Create the nginx access log file
+  command: touch "{{ nginx_access_file }}"
+           creates="{{ nginx_access_file }}"
+
 - name: Create the django error log file
   command: touch "{{ django_log_file }}"
            creates="{{ django_log_file }}"
@@ -80,6 +95,20 @@
 
 - name: Set permission to the tilestache accesslog file
   file: path="{{ tilestache_access_file }}"
+        owner="{{ gunicorn_user }}"
+        group="{{ gunicorn_group }}"
+        mode=0664
+        state=file
+
+- name: Set permission to the nginx log file
+  file: path="{{ nginx_log_file }}"
+        owner="{{ gunicorn_user }}"
+        group="{{ gunicorn_group }}"
+        mode=0664
+        state=file
+
+- name: Set permission to the nginx accesslog file
+  file: path="{{ nginx_access_file }}"
         owner="{{ gunicorn_user }}"
         group="{{ gunicorn_group }}"
         mode=0664

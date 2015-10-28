@@ -7,6 +7,8 @@ django_log_file: "{{ application_log_dir }}/gunicorn_django_error.log"
 django_access_file: "{{ application_log_dir }}/gunicorn_django_access.log"
 tilestache_log_file: "{{ application_log_dir }}/gunicorn_tilestache_error.log"
 tilestache_access_file: "{{ application_log_dir }}/gunicorn_tilestache_access.log"
+nginx_log_file: "{{ logs_directory }}/nginx/nginx_error.log"
+nginx_access_file: "{{ logs_directory }}/nginx/nginx_access.log"
 requirements_file: "{{ project_path }}/requirements.txt"
 
 

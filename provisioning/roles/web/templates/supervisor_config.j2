@@ -8,8 +8,8 @@
 command = {{ virtualenv_path }}/bin/tiling_gunicorn_start
 autostart=True
 autorestart=True
-stdout_logfile = {{ tilestache_access_log }}
-stderr_logfile = {{ tilestache_error_log }}
+stdout_logfile = {{ tilestache_access_file }}
+stderr_logfile = {{ tilestache_log_file }}
 
 #[program:{{ celery_application_name }}]
 #command={{ virtualenv_path }}/bin/celery -A {{ application_name }} worker -l INFO --concurrency={{ celery_num_workers }}
