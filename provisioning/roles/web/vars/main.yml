@@ -3,10 +3,10 @@
 # Application settings.
 project_path: "{{ website_directory }}"
 application_log_dir: "{{ logs_directory }}/gunicorn"
-django_log_file: "{{ application_log_dir }}/gunicorn_django_error.log"
-django_access_file: "{{ application_log_dir }}/gunicorn_django_access.log"
-tilestache_log_file: "{{ application_log_dir }}/gunicorn_tilestache_error.log"
-tilestache_access_file: "{{ application_log_dir }}/gunicorn_tilestache_access.log"
+django_log_file: "{{ application_log_dir }}/django_error.log"
+django_access_file: "{{ application_log_dir }}/django_access.log"
+tilestache_log_file: "{{ application_log_dir }}/tilestache_error.log"
+tilestache_access_file: "{{ application_log_dir }}/tilestache_access.log"
 nginx_log_file: "{{ logs_directory }}/nginx/nginx_error.log"
 nginx_access_file: "{{ logs_directory }}/nginx/nginx_access.log"
 requirements_file: "{{ project_path }}/requirements.txt"
@@ -20,8 +20,8 @@ gunicorn_group: "{{ application_group }}"
 # Nginx settings
 nginx_http_port: 80
 nginx_https_port: 443
-nginx_static_dir: "{{ virtualenv_path }}/static/"
-nginx_media_dir: "{{ virtualenv_path }}/media/"
+nginx_static_dir: "{{ website_directory }}/{{ project_name }}/assets/"
+nginx_media_dir: "{{ website_directory }}/{{ project_name }}/media/"
 
 
 # Django Environment variables
