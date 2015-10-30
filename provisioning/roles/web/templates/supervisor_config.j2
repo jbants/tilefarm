@@ -12,8 +12,8 @@ stdout_logfile = {{ tilestache_access_file }}
 stderr_logfile = {{ tilestache_log_file }}
 
 #[program:{{ celery_application_name }}]
-#command={{ virtualenv_path }}/bin/celery -A {{ application_name }} worker -l INFO --concurrency={{ celery_num_workers }}
-#directory=/webapps/website/{{ application_name }}
+#command={{ virtualenv_path }}/bin/celery -A {{ project_name }} worker -l INFO --concurrency={{ celery_num_workers }}
+#directory=/webapps/website/{{ project_name }}
 #user={{ celery_user }}
 #numprocs=1
 #stdout_logfile={{ celery_log_file }}
