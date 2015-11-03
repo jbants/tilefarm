@@ -4,6 +4,7 @@
   pip: virtualenv={{ virtualenv_path }} name={{ item }} virtualenv_site_packages=yes
   with_items:
     - celery
+    - flower
 
 #- include: copy_scripts.yml
 - name: Create the {{ celery_application_name }} log directory

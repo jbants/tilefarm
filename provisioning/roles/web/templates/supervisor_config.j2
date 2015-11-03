@@ -34,3 +34,13 @@ stderr_logfile = {{ tilestache_log_file }}
 #; if rabbitmq is supervised, set its priority higher
 #; so it starts first
 #priority=998
+
+#[program:flower]
+#command={{ virtualenv_path }}/bin/flower -A {{ project_name }}
+#directory=/webapps/website/{{ project_name }}
+#user={{ celery_user }}
+#stdout_logfile={{ celery_log_file }}
+#stderr_logfile={{ celery_log_file }}
+#autostart=true
+#autorestart=true
+#startsecs=10
