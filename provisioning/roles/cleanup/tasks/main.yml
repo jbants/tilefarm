@@ -17,7 +17,6 @@
     command: setfacl -Rm u:webuser:rwx,g:{{ gunicorn_group }}:rwx /webapps/
     sudo: yes
 
-
   - name: Update bashrc for user
     lineinfile:
       dest="/home/{{ gunicorn_user }}/.bashrc"
