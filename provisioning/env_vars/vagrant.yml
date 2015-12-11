@@ -8,12 +8,12 @@ git_branch: master
 # Database settings.
 db_user: "{{ application_name }}"
 db_name: "{{ application_name }}"
-db_password: password
+db_password: isc_website_password
 
 
 # Gunicorn settings. For the number of workers, a good rule to follow is
 # 2 x number of CPUs + 1
-gunicorn_num_workers: 3
+gunicorn_num_workers: 5
 
 # Setting this to 1 will restart the Gunicorn process each time
 # you make a request, basically reloading the code. Very handy
@@ -28,21 +28,21 @@ nginx_server_name: 192.168.33.15
 
 ssl_src_dir: ssl_self_signed
 ssl_dest_dir: /etc/ssl
-ssl_key_password: password
+ssl_key_password: isc_website
 
 
 # RabbitMQ settings.
 rabbitmq_server_name: "{{ inventory_hostname }}"
 rabbitmq_admin_user: admin
-rabbitmq_admin_password: password
+rabbitmq_admin_password: isc_website
 rabbitmq_application_vhost: "{{ application_name }}"
 rabbitmq_application_user: "{{ application_name }}"
-rabbitmq_application_password: password
+rabbitmq_application_password: isc_website
 
 
 # Celery settings.
 celery_num_workers: 2
-flower_admin_password: password
+flower_admin_password: isc_website
 
 # Application settings.
 django_settings_file: "{{ application_name }}.settings.local"
