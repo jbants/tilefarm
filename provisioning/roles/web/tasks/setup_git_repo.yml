@@ -4,7 +4,7 @@
   git: repo="{{ git_repo }}"
        version="{{ git_branch }}"
        dest="{{ website_directory }}/"
-       accept_hostkey=yes
+       accept_hostkey=no
   when: setup_git_repo is defined and setup_git_repo
   tags: git
 
