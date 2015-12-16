@@ -1,6 +1,6 @@
 ---
 
-git_repo: git@bitbucket.org:integratedsustainability/isc_website.git
+git_repo: https://github.com/jbants/EasyTileServer.git
 
 project_name: tilefarm
 application_name: webuser

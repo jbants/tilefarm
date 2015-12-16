@@ -14,6 +14,7 @@
                  configure_priv=.*
                  read_priv=.*
                  write_priv=.*
+                 tags=management
                  state=present
 
 - name: Ensure the default 'guest' user doesn't exist
