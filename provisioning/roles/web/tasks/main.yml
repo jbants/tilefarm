@@ -1,18 +1,13 @@
 ---
 
-- include: install_additional_packages.yml
-  tags: packages
+- include: setup_logging.yml
+  tags: logging
 
-- include: create_users_and_groups.yml
-
-- include: setup_virtualenv.yml
-  tags: virtualenv
+- include: setup_gunicorn.yml
+  tags: gunicorn
 
 #- include: setup_django_app.yml
 #  tags: deploy
-
-- include: setup_supervisor.yml
-  tags: supervisor
 
 - include: set_file_permissions.yml
   tags: deploy
@@ -22,3 +17,6 @@
 
 - include: setup_git_repo.yml
   tags: deploy
+
+- include: setup_supervisor.yml
+  tags: supervisor

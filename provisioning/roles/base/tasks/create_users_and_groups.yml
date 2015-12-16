@@ -1,13 +1,13 @@
 ---
 
 - name: Create the application user
-  user: name={{ gunicorn_user }} password={{ gunicorn_password }} state=present shell=/bin/bash
+  user: name={{ application_name }} password={{ application_password }} state=present shell=/bin/bash
 
 - name: Create the application group
-  group: name={{ gunicorn_group }} system=yes state=present
+  group: name={{ application_group }} system=yes state=present
 
 - name: Add the application user to the application group
-  user: name={{ gunicorn_user }} group={{ gunicorn_group }} state=present
+  user: name={{ application_name }} group={{ application_group }} state=present
 
 - name: Create a ssh Directory
   file: path=/home/{{ application_name }}/.ssh

@@ -4,7 +4,7 @@
   hosts: all
   sudo: yes
   sudo_user: root
-  remote_user: vagrant
+  remote_user: vagrant # remove if provisioning without vagrant
   vars:
     - setup_git_repo: yes
     - update_apt_cache: yes
@@ -17,7 +17,7 @@
     - db #checked
     - rabbitmq #checked
     - tilestache #checked
+    - celery #checked 
     - web #checked
-    - celery #checked   
     - cleanup
     #- memcached

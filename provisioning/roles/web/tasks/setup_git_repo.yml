@@ -1,31 +1,15 @@
 ---
 
+- name: Setup the Git repo
+  git: repo="{{ git_repo }}"
+       version="{{ git_branch }}"
+       dest="{{ website_directory }}/"
+       accept_hostkey=yes
+  when: setup_git_repo is defined and setup_git_repo
+  tags: git
 
-- name: Create the private key
-  template: src=id_rsa_priv.j2
-            dest=/home/{{ application_name }}/.ssh/id_rsa
-            mode=0600
-            owner="{{ application_name }}"
-            group="{{ application_group }}"
-
-- name: Create the public key
-  template: src=id_rsa_pub.j2
-            dest=/home/{{ application_name }}/.ssh/id_rsa.pub
-            mode=0644
-            owner="{{ application_name }}"
-            group="{{ application_group }}"
-
-# - name: Setup the Git repo
-#   git: repo="{{ git_repo }}"
-#        version="{{ git_branch }}"
-#        dest="{{ website_directory }}/"
-#        accept_hostkey=yes
-#   when: setup_git_repo is defined and setup_git_repo
-#   tags: git
-
-# - name: Delete all .pyc files
-#   command: find . -name '*.pyc' -delete
-#   args:
-#     chdir: "{{ website_directory }}/"
-#   when: setup_git_repo is defined and setup_git_repo
-#   tags: git
+- name: Delete all .pyc files
+  command: find . -name '*.pyc' -delete
+  args:
+    chdir: "{{ website_directory }}/"
+  tags: git

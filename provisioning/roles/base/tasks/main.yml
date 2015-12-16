@@ -1,5 +1,6 @@
 ---
-    
+#Set up the basic environment for working and install virtualenv
+
 - name: Ensure bash, OpenSSl, and libssl are the latest versions
   apt: name={{ item }} update_cache={{ update_apt_cache }} state=latest
   with_items:
@@ -26,11 +27,31 @@
     - python-mapnik
     - python-pyproj
     - python-gdal
-
   tags: packages
 
-- name: Create a Mapping Directory
+- name: Create a Tiling Configuration Directory
   file: path={{ mapping_directory }}/configs 
+        recurse=yes
+        state=directory
+        mode=0775
+  tags: packages
+
+- name: Create a Tiling xml Directory
+  file: path={{ mapping_directory }}/xml
+        recurse=yes
+        state=directory
+        mode=0775
+  tags: packages
+
+- name: Create a Tiling cache Directory
+  file: path={{ mapping_directory }}/cache
+        recurse=yes
+        state=directory
+        mode=0775
+  tags: packages
+
+- name: Create a Tiling data Directory
+  file: path={{ mapping_directory }}/data
         recurse=yes
         state=directory
         mode=0775
@@ -49,10 +70,25 @@
         state=directory
         mode=0775
   tags: packages  
-  
-- name: install virtual env
+
+- name: install virtual env and numpy
   pip: name={{ item }}
   with_items:
     - numpy
     - virtualenv
     - virtualenvwrapper
+
+- name: Create the virtualenv
+  command: virtualenv "{{ virtualenv_path }}" --system-site-packages
+           creates="{{ virtualenv_path }}"/bin/activate
+
+- include: create_users_and_groups.yml
+
+- name: Update bashrc for user
+  lineinfile:
+    dest="/home/{{ application_name }}/.bashrc"
+    line="export WORKON_HOME=/virtualenv/ && source /usr/local/bin/virtualenvwrapper.sh"
+    owner="{{ application_name }}"
+    state=present
+    insertafter=EOF
+    create=True

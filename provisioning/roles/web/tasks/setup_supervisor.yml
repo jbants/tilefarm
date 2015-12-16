@@ -1,10 +1,10 @@
 ---
 
 - name: Create the Supervisor config file
-  template: src=supervisor_config.j2 dest="/etc/supervisor/conf.d/{{ project_name }}.conf" backup=yes
+  template: src=supervisor_config.j2 dest="/etc/supervisor/conf.d/{{ project_name }}_supervisor.conf" backup=yes
 
 - name: Re-read the Supervisor config files
-  supervisorctl: name=tilestache state=present
+  supervisorctl: name=all state=present
 
 - name: Restart Supervisor
-  supervisorctl: name=tilestache state=restarted
+  supervisorctl: name=all state=restarted

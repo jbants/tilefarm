@@ -1,0 +1,22 @@
+---
+
+- name: Ensure gunicorn is installed
+  pip: virtualenv="{{ virtualenv_path }}" name=gunicorn
+
+- name: Create the Gunicorn script file
+  template: src=django_gunicorn_start.j2
+            dest={{ virtualenv_path }}/bin/django_gunicorn_start
+            owner="{{ gunicorn_user }}"
+            group="{{ gunicorn_group }}"
+            mode=0755
+            backup=yes
+  tags: deploy
+
+- name: Create the Tilestache Gunicorn script file
+  template: src=tiling_gunicorn_start.j2
+            dest={{ virtualenv_path }}/bin/tiling_gunicorn_start
+            owner="{{ gunicorn_user }}"
+            group="{{ gunicorn_group }}"
+            mode=0755
+            backup=yes
+  tags: deploy

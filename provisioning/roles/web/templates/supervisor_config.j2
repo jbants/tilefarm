@@ -1,8 +1,8 @@
-#[program:{{ project_name }}]
-#command = {{ virtualenv_path }}/bin/gunicorn_start
-#user = {{ gunicorn_user }}
-#stdout_logfile = {{ django_log_file }}
-#redirect_stderr = true
+[program:{{ project_name }}]
+command = {{ virtualenv_path }}/bin/django_gunicorn_start
+user = {{ gunicorn_user }}
+stdout_logfile = {{ django_log_file }}
+redirect_stderr = true
 
 [program:tilestache]
 command = {{ virtualenv_path }}/bin/tiling_gunicorn_start
@@ -11,36 +11,36 @@ autorestart=True
 stdout_logfile = {{ tilestache_access_file }}
 stderr_logfile = {{ tilestache_log_file }}
 
-#[program:{{ celery_application_name }}]
-#command={{ virtualenv_path }}/bin/celery -A {{ project_name }} worker -l INFO --concurrency={{ celery_num_workers }}
-#directory=/webapps/website/{{ project_name }}
-#user={{ celery_user }}
-#numprocs=1
-#stdout_logfile={{ celery_log_file }}
-#stderr_logfile={{ celery_log_file }}
-#autostart=true
-#autorestart=true
-#startsecs=10
+[program:{{ celery_application_name }}]
+command={{ virtualenv_path }}/bin/celery -A {{ project_name }} worker -l INFO --concurrency={{ celery_num_workers }}
+directory=/webapps/website/{{ project_name }}
+user={{ celery_user }}
+numprocs=1
+stdout_logfile={{ celery_log_file }}
+stderr_logfile={{ celery_log_file }}
+autostart=true
+autorestart=true
+startsecs=10
 
-#; Need to wait for currently executing tasks to finish at shutdown.
-#; Increase this if you have very long running tasks.
-#stopwaitsecs = 600
+; Need to wait for currently executing tasks to finish at shutdown.
+; Increase this if you have very long running tasks.
+stopwaitsecs = 600
 
-#; When resorting to send SIGKILL to the program to terminate it
-#; send SIGKILL to its whole process group instead,
-#; taking care of its children as well.
-#killasgroup=true
+; When resorting to send SIGKILL to the program to terminate it
+; send SIGKILL to its whole process group instead,
+; taking care of its children as well.
+killasgroup=true
 
-#; if rabbitmq is supervised, set its priority higher
-#; so it starts first
-#priority=998
+; if rabbitmq is supervised, set its priority higher
+; so it starts first
+priority=998
 
-#[program:flower]
-#command={{ virtualenv_path }}/bin/flower -A {{ project_name }}
-#directory=/webapps/website/{{ project_name }}
-#user={{ celery_user }}
-#stdout_logfile={{ celery_log_file }}
-#stderr_logfile={{ celery_log_file }}
-#autostart=true
-#autorestart=true
-#startsecs=10
+[program:flower]
+command={{ virtualenv_path }}/bin/flower -A {{ project_name }}
+directory=/webapps/website/{{ project_name }}
+user={{ celery_user }}
+stdout_logfile={{ celery_log_file }}
+stderr_logfile={{ celery_log_file }}
+autostart=true
+autorestart=true
+startsecs=10

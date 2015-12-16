@@ -16,12 +16,3 @@
   - name: change permissions
     command: setfacl -Rm u:webuser:rwx,g:{{ gunicorn_group }}:rwx /webapps/
     sudo: yes
-
-  - name: Update bashrc for user
-    lineinfile:
-      dest="/home/{{ gunicorn_user }}/.bashrc"
-      line="export WORKON_HOME=/virtualenv/ && source /usr/local/bin/virtualenvwrapper.sh"
-      owner="{{ gunicorn_user }}"
-      state=present
-      insertafter=EOF
-      create=True

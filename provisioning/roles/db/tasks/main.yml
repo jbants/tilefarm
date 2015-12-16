@@ -31,6 +31,22 @@
                  template='template0'
                  state=present
 
+# Create superuser
+- name: Ensure user has access to the database
+  sudo_user: postgres
+  postgresql_user: db={{ db_name }}
+                   name={{ standard_user }}
+                   password={{ standard_pw }}
+                   priv=ALL
+                   state=present
+
+- name: Ensure user has necessary privileges
+  sudo_user: postgres
+  postgresql_user: name={{ standard_user }}
+                   role_attr_flags=SUPERUSER,CREATEDB,LOGIN
+                   state=present
+
+# Create webuser
 - name: Ensure user has access to the database
   sudo_user: postgres
   postgresql_user: db={{ db_name }}
@@ -39,8 +55,8 @@
                    priv=ALL
                    state=present
 
-- name: Ensure user does not have unnecessary privileges
+- name: Ensure user has necessary privileges
   sudo_user: postgres
   postgresql_user: name={{ db_user }}
-                   role_attr_flags=SUPERUSER,CREATEDB,LOGIN
+                   role_attr_flags=CREATEDB,LOGIN
                    state=present

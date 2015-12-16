@@ -1,41 +1,16 @@
 ---
 
-- name: Create the virtualenv
-  command: virtualenv "{{ virtualenv_path }}" --system-site-packages
-           creates="{{ virtualenv_path }}"/bin/activate
-
-- name: Ensure gunicorn is installed
-  pip: virtualenv="{{ virtualenv_path }}" name=gunicorn
-
-- name: Create the Gunicorn script file
-  template: src=gunicorn_start.j2
-            dest={{ virtualenv_path }}/bin/gunicorn_start
-            owner="{{ gunicorn_user }}"
-            group="{{ gunicorn_group }}"
-            mode=0755
-            backup=yes
-  tags: deploy
-
-- name: Create the Tilestache Gunicorn script file
-  template: src=tiling_gunicorn_start.j2
-            dest={{ virtualenv_path }}/bin/tiling_gunicorn_start
-            owner="{{ gunicorn_user }}"
-            group="{{ gunicorn_group }}"
-            mode=0755
-            backup=yes
-  tags: deploy
-
 - name: Create the application log folder
   file: path="{{ application_log_dir }}"
-        owner="{{ gunicorn_user }}"
-        group="{{ gunicorn_group }}"
+        owner="{{ application_name }}"
+        group="{{ application_group }}"
         mode=0774
         state=directory
 
 - name: Create the nginx log folder
   file: path="{{ logs_directory }}/nginx"
-        owner="{{ gunicorn_user }}"
-        group="{{ gunicorn_group }}"
+        owner="{{ application_name }}"
+        group="{{ application_group }}"
         mode=0774
         state=directory
 
@@ -63,53 +38,45 @@
   command: touch "{{ tilestache_access_file }}"
            creates="{{ tilestache_access_file }}"     
 
-- name: Create the virtualenv postactivate script to set environment variables
-  template: src=virtualenv_postactivate.j2
-            dest={{ virtualenv_path }}/bin/postactivate
-            owner="{{ gunicorn_user }}"
-            group="{{ gunicorn_group }}"
-            mode=0640
-            backup=yes
-  tags: deploy
-
 - name: Set permission to the django log file
   file: path="{{ django_log_file }}"
-        owner="{{ gunicorn_user }}"
-        group="{{ gunicorn_group }}"
+        owner="{{ application_name }}"
+        group="{{ application_group }}"
         mode=0664
         state=file
 
 - name: Set permission to the django access log file
   file: path="{{ django_access_file }}"
-        owner="{{ gunicorn_user }}"
-        group="{{ gunicorn_group }}"
+        owner="{{ application_name }}"
+        group="{{ application_group }}"
         mode=0664
         state=file
 
 - name: Set permission to the tilestache log file
   file: path="{{ tilestache_log_file }}"
-        owner="{{ gunicorn_user }}"
-        group="{{ gunicorn_group }}"
+        owner="{{ application_name }}"
+        group="{{ application_group }}"
         mode=0664
         state=file
 
 - name: Set permission to the tilestache accesslog file
   file: path="{{ tilestache_access_file }}"
-        owner="{{ gunicorn_user }}"
-        group="{{ gunicorn_group }}"
+        owner="{{ application_name }}"
+        group="{{ application_group }}"
         mode=0664
         state=file
 
 - name: Set permission to the nginx log file
   file: path="{{ nginx_log_file }}"
-        owner="{{ gunicorn_user }}"
-        group="{{ gunicorn_group }}"
+        owner="{{ application_name }}"
+        group="{{ application_group }}"
         mode=0664
         state=file
 
 - name: Set permission to the nginx accesslog file
   file: path="{{ nginx_access_file }}"
-        owner="{{ gunicorn_user }}"
-        group="{{ gunicorn_group }}"
+        owner="{{ application_name }}"
+        group="{{ application_group }}"
         mode=0664
         state=file
+        

@@ -1,26 +1,29 @@
 #!/bin/sh
 
-NAME="tilestache_app" # Name of the application
+NAME="{{ project_name }}_tilestache" # Name of the application
+CONFIG_DIR="{{ project_path }}"
 NUM_WORKERS={{ gunicorn_num_workers }} # how many worker processes should Gunicorn spawn
 IP=0.0.0.0 # ip address to run on
 PORT=8083 # port to run on
-CONFIG_DIR={{ project_path }}
+USER="{{ gunicorn_user }}"
+GROUP="{{ gunicorn_group }}"
 
 # Set this to 0 for unlimited requests. During development, you might want to
 # set this to 1 to automatically restart the process on each request (i.e. your
 # code will be reloaded on every request).
-MAX_REQUESTS={{ gunicorn_max_requests }}
+MAX_REQUESTS="{{ gunicorn_max_requests }}"
 
 echo "Starting $NAME on $IP:$PORT"
 
+# Activate the virtual environment.
 cd $CONFIG_DIR
 . {{ virtualenv_path }}/bin/activate
 
 # Programs meant to be run under supervisor should not daemonize themselves (do not use --daemon)
 {{ virtualenv_path }}/bin/gunicorn "TileStache:WSGITileServer('{{ mapping_directory }}/configs/tilestache.cfg')" \
---bind $IP:$PORT \
---name $NAME 
---workers $NUM_WORKERS \
---log-level=info \
---log-file={{ tilestache_log_file }} \
---access-logfile={{ tilestache_access_file }}
+	--bind $IP:$PORT \
+	--name $NAME 
+	--workers $NUM_WORKERS \
+	--log-level=info \
+	--log-file={{ tilestache_log_file }} \
+	--access-logfile={{ tilestache_access_file }}

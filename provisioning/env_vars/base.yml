@@ -2,7 +2,7 @@
 
 git_repo: git@bitbucket.org:integratedsustainability/isc_website.git
 
-project_name: isc_website
+project_name: tilefarm
 application_name: webuser
 application_group : webapps
 application_password: $1$salty$SzJsU4qDcXp536Acnlp6I. #password see: https://github.com/ansible/ansible/issues/2305
@@ -14,5 +14,8 @@ logs_directory: "/webapps/logs"
 gunicorn_user: "{{ application_name }}"
 gunicorn_password: "{{ application_password }}"
 
-virtualenv_name: website
+virtualenv_name: tilefarm
 virtualenv_path: "/virtualenv/{{ virtualenv_name }}"
+
+standard_user: admin
+standard_pw: password
