@@ -8,3 +8,11 @@
 
 - name: Add the application user to the application group
   user: name={{ gunicorn_user }} group={{ gunicorn_group }} state=present
+
+- name: Create a ssh Directory
+  file: path=/home/{{ application_name }}/.ssh
+        recurse=yes
+        state=directory
+        mode=0700
+        owner="{{ application_name }}"
+        group="{{ application_group }}"

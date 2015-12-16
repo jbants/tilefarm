@@ -4,7 +4,6 @@
 setup_git_repo: no
 git_branch: development
 
-
 # Database settings.
 db_user: "{{ application_name }}"
 db_name: "{{ application_name }}"
