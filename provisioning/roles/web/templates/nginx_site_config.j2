@@ -1,4 +1,4 @@
-upstream {{ application_name }}_web_server {
+upstream {{ project_name }}_web_server {
   # fail_timeout=0 means we always retry an upstream even if it failed
   # to return a good HTTP response (in case the Unicorn master nukes a
   # single worker for timing out).
@@ -6,10 +6,10 @@ upstream {{ application_name }}_web_server {
     server unix:{{ virtualenv_path }}/run/gunicorn.sock fail_timeout=0;
 }
 
-upstream {{ application_name }}_tiling{
-    server 0.0.0.0:8083;
-}
-
+######   I DONT THINK THIS IS NEEDED IF WE ARE CONTROLING TILESTACHE THROUGH THE DJANGO APP.
+#upstream {{ project_name }}_tiling{
+#    server 0.0.0.0:8083;
+#}
 
 server {
     listen      80;
@@ -28,19 +28,82 @@ server {
         alias   {{ nginx_media_dir }};
     }
 
-    location /tiles {
-        proxy_pass http://{{ application_name }}_tiling/; # TileStache is running on port 8083 through gunicorn
-	}    
+# See http://andyfiedler.com/blog/using-nginx-to-proxy-tilestache-180/
+    location ~ ^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]+)\/([\d]+)(\.+(png|json|geojson)){
+        root /webapps/tilefarm/cache;
+
+        set $originaluri /$1/$2/$3/$4.$7;
+
+        # 1 char X
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{1})\/([\d]{1}).$7$" /$1/$2/000/00$3/000/00$4.$7 break;
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{1})\/([\d]{2}).$7$" /$1/$2/000/00$3/000/0$4.$7 break;
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{1})\/([\d]{3}).$7$" /$1/$2/000/00$3/000/$4.$7 break;
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{1})\/([\d]{1})([\d]{3}).$7$" /$1/$2/000/00$3/00$4/$5.$7 break;
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{1})\/([\d]{2})([\d]{3}).$7$" /$1/$2/000/00$3/0$4/$5.$7 break;
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{1})\/([\d]{3})([\d]{3}).$7$" /$1/$2/000/00$3/$4/$5.$7 break;
+
+        # 2 char X
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{2})\/([\d]{1}).$7$" /$1/$2/000/0$3/000/00$4.$7 break;
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{2})\/([\d]{2}).$7$" /$1/$2/000/0$3/000/0$4.$7 break;
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{2})\/([\d]{3}).$7$" /$1/$2/000/0$3/000/$4.$7 break;
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{2})\/([\d]{1})([\d]{3}).$7$" /$1/$2/000/0$3/00$4/$5.$7 break;
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{2})\/([\d]{2})([\d]{3}).$7$" /$1/$2/000/0$3/0$4/$5.$7 break;
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{2})\/([\d]{3})([\d]{3}).$7$" /$1/$2/000/0$3/$4/$5.$7 break;
+
+        # 3 char X
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{3})\/([\d]{1}).$7$" /$1/$2/000/$3/000/00$4.$7 break;
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{3})\/([\d]{2}).$7$" /$1/$2/000/$3/000/0$4.$7 break;
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{3})\/([\d]{3}).$7$" /$1/$2/000/$3/000/$4.$7 break;
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{3})\/([\d]{1})([\d]{3}).$7$" /$1/$2/000/$3/00$4/$5.$7 break;
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{3})\/([\d]{2})([\d]{3}).$7$" /$1/$2/000/$3/0$4/$5.$7 break;
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{3})\/([\d]{3})([\d]{3}).$7$" /$1/$2/000/$3/$4/$5.$7 break;
+
+        # 4 char X
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{1})([\d]{3})\/([\d]{1}).$7$" /$1/$2/00$3/$4/000/00$5.$7 break;
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{1})([\d]{3})\/([\d]{2}).$7$" /$1/$2/00$3/$4/000/0$5.$7 break;
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{1})([\d]{3})\/([\d]{3}).$7$" /$1/$2/00$3/$4/000/$5.$7 break;
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{1})([\d]{3})\/([\d]{1})([\d]{3}).$7$" /$1/$2/00$3/$4/00$5/$6.$7 break;
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{1})([\d]{3})\/([\d]{2})([\d]{3}).$7$" /$1/$2/00$3/$4/0$5/$6.$7 break;
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{1})([\d]{3})\/([\d]{3})([\d]{3}).$7$" /$1/$2/00$3/$4/$5/$6.$7 break;
+
+        # 5 char X
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{2})([\d]{3})\/([\d]{1}).$7$" /$1/$2/0$3/$4/000/00$5.$7 break;
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{2})([\d]{3})\/([\d]{2}).$7$" /$1/$2/0$3/$4/000/0$5.$7 break;
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{2})([\d]{3})\/([\d]{3}).$7$" /$1/$2/0$3/$4/000/$5.$7 break;
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{2})([\d]{3})\/([\d]{1})([\d]{3}).$7$" /$1/$2/0$3/$4/00$5/$6.$7 break;
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{2})([\d]{3})\/([\d]{2})([\d]{3}).$7$" /$1/$2/0$3/$4/0$5/$6.$7 break;
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{2})([\d]{3})\/([\d]{3})([\d]{3}).$7$" /$1/$2/0$3/$4/$5/$6.$7 break;
+
+        # 6 char X
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{3})([\d]{3})\/([\d]{1}).$7$" /$1/$2/$3/$4/000/00$5.$7 break;
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{3})([\d]{3})\/([\d]{2}).$7$" /$1/$2/$3/$4/000/0$5.$7 break;
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{3})([\d]{3})\/([\d]{3}).$7$" /$1/$2/$3/$4/000/$5.$7 break;
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{3})([\d]{3})\/([\d]{1})([\d]{3}).$7$" /$1/$2/$3/$4/00$5/$6.$7 break;
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{3})([\d]{3})\/([\d]{2})([\d]{3}).$7$" /$1/$2/$3/$4/0$5/$6.$7 break;
+        rewrite "^\/tiles\/([\w\-]+)\/([\d]+)\/([\d]{3})([\d]{3})\/([\d]{3})([\d]{3}).$7$" /$1/$2/$3/$4/$5/$6.$7 break;
+
+        # Try to serve the file from the disk. If that doesn't work, pass through the request via the proxy
+        try_files $uri @tilestache;
+    }   
+    
+    location @tilestache {
+
+        # Rewrite back to standard OSM form
+        rewrite ^(.*)$ $originaluri break; 
+        add_header X-Static miss;
+        proxy_pass http://0.0.0.0:8083;
+        proxy_set_header Host $http_host;
+    }
 
     location / {
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
         proxy_set_header Host $http_host;
         proxy_redirect off;
 
         # Try to serve static files from nginx, no point in making an
         # *application* server like Unicorn/Rainbows! serve static files.
         if (!-f $request_filename) {
-            proxy_pass http://{{ application_name }}_web_server;
+            proxy_pass http://{{ project_name }}_web_server;
             break;
         }
     }
@@ -48,6 +111,6 @@ server {
     # Error pages
     error_page 500 502 504 /500.html;
     location = /500.html {
-        root {{ project_path }}/{{ application_name }}/templates/;
+        root {{ project_path }}/{{ project_name }}/templates/;
     }
 }

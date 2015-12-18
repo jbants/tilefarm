@@ -1,0 +1,47 @@
+upstream webuser_web_server {
+  # fail_timeout=0 means we always retry an upstream even if it failed
+  # to return a good HTTP response (in case the Unicorn master nukes a
+  # single worker for timing out).
+
+    server unix:/virtualenv/tilefarm/run/gunicorn.sock fail_timeout=0;
+}
+
+upstream webuser_tiling{
+    server 0.0.0.0:8083;
+}
+
+
+server {
+    listen      80;
+    server_name 192.168.33.15; 
+
+    client_max_body_size 4G;
+
+    access_log /webapps/logs/nginx/nginx_access.log;
+    error_log /webapps/logs/nginx/nginx_error.log;
+
+    location /static/ {
+        alias   /webapps/website/tilefarm/assets/;
+    }
+
+    location /media/ {
+        alias   /webapps/website/tilefarm/media/;
+    }
+
+    location /tiles {
+        proxy_pass http://webuser_tiling/; # TileStache is running on port 8083 through gunicorn
+	}    
+
+    location / {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+        proxy_pass http://webuser_web_server;
+    }
+
+    # Error pages
+    error_page 500 502 504 /500.html;
+    location = /500.html {
+        root /webapps/website/webuser/templates/;
+    }
+}
