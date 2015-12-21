@@ -13,7 +13,7 @@ server {
     client_max_body_size 4G;
     rewrite_log on;
     access_log /webapps/logs/nginx/nginx_access.log;
-    error_log /webapps/logs/nginx/nginx_error.log debug;
+    error_log /webapps/logs/nginx/nginx_error.log;
 
     location /static/ {
         alias   /webapps/website/tilefarm/assets/;
