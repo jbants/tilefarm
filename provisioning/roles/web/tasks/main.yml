@@ -6,9 +6,6 @@
 - include: setup_gunicorn.yml
   tags: gunicorn
 
-#- include: setup_django_app.yml
-#  tags: deploy
-
 - include: set_file_permissions.yml
   tags: deploy
 
@@ -16,6 +13,9 @@
   tags: nginx
 
 - include: setup_git_repo.yml
+  tags: deploy
+
+- include: setup_django_app.yml
   tags: deploy
 
 - include: setup_supervisor.yml
