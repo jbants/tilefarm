@@ -13,10 +13,10 @@
 - name: Install PostgreSQL
   apt: name={{ item }} update_cache={{ update_apt_cache }} state=installed
   with_items:
-    - postgresql
+    - postgresql-9.4
     - postgresql-contrib
     - python-psycopg2
-    - postgis
+    - postgresql-9.4-postgis-2.2
   tags: packages
 
 - name: Ensure the PostgreSQL service is running
