@@ -11,6 +11,14 @@
     virtualenv: "{{ virtualenv_path }}"
   tags: django.migrate
 
+- name: Run Django loaddata
+  django_manage:
+    command: loaddata
+    app_path: "{{ project_path }}/{{ project_name }}"
+    fixtures: "initial_data/db.json"
+    virtualenv: "{{ virtualenv_path }}"
+  tags: django.loaddata
+
 - name: Run Django collectstatic
   django_manage:
     command: collectstatic

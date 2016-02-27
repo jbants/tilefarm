@@ -1,10 +1,10 @@
 ---
-- name: Update apt with postgres 94 key
+- name: Update apt with postgres key
   apt_key: url=http://www.postgresql.org/media/keys/ACCC4CF8.asc 
            state=present
   tags: packages
 
-- name: Update apt with postgres 94
+- name: Update apt with postgres
   apt_repository: repo='deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main' 
                   update_cache={{ update_apt_cache }}
                   state=present
@@ -13,10 +13,10 @@
 - name: Install PostgreSQL
   apt: name={{ item }} update_cache={{ update_apt_cache }} state=installed
   with_items:
-    - postgresql-9.4
-    - postgresql-contrib-9.4
+    - postgresql-9.5
+    - postgresql-contrib-9.5
     - python-psycopg2
-    - postgresql-9.4-postgis-2.2
+    - postgresql-9.5-postgis-2.2
   tags: packages
 
 - name: Ensure the PostgreSQL service is running
@@ -56,15 +56,15 @@
                    state=present
                    
 - name: Ensure PostgreSQL is listening on all localhost
-  lineinfile: dest=/etc/postgresql/9.4/main/postgresql.conf
+  lineinfile: dest=/etc/postgresql/9.5/main/postgresql.conf
               regexp='^#?listen_addresses\s*='
-              line="listen_addresses = '127.0.0.1'"
+              line="listen_addresses = '*'"
               state=present
   notify: restart postgresql   
 
-- lineinfile: dest=/etc/postgresql/9.4/main/pg_hba.conf
-              regexp='host\s+all\s+all\s+127.0.0.1/32\s+md5'
-              line='host all all 127.0.0.1/32 md5'
+- lineinfile: dest=/etc/postgresql/9.5/main/pg_hba.conf
+              regexp='host\s+all\s+all\s+127.0.0.0/32\s+md5'
+              line='host all all 0.0.0.0/0 md5'
                insertbefore=BOF
   notify: restart postgresql  
 

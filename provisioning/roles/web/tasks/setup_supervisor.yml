@@ -3,8 +3,26 @@
 - name: Create the Supervisor config file
   template: src=supervisor_config.j2 dest="/etc/supervisor/conf.d/{{ project_name }}_supervisor.conf" backup=yes
 
-- name: Re-read the Supervisor config files
-  supervisorctl: name=all_progs state=present
+- name: Re-read the Supervisor config file {{ project_name }}]
+  supervisorctl: name="{{ project_name }}" state=present
 
-- name: Restart Supervisor
-  supervisorctl: name="all_progs:" state=restarted
+- name: Re-read the Supervisor config file tilestache
+  supervisorctl: name="tilestache" state=present
+  
+- name: Re-read the Supervisor config file {{ celery_application_name }}
+  supervisorctl: name="{{ celery_application_name }}" state=present
+  
+- name: Re-read the Supervisor config file flower
+  supervisorctl: name="flower" state=present
+
+- name: Restart Supervisor {{ project_name }}]
+  supervisorctl: name="{{ project_name }}" state=restarted
+
+- name: Restart Supervisor tilestache
+  supervisorctl: name="tilestache" state=restarted
+  
+- name: Restart Supervisor {{ celery_application_name }}
+  supervisorctl: name="{{ celery_application_name }}" state=restarted
+  
+- name: Restart Supervisor flower
+  supervisorctl: name="flower" state=restarted

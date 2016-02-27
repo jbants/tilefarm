@@ -14,12 +14,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.network :private_network, ip: "192.168.33.15"
 
   config.vm.provider :virtualbox do |vb|
-    vb.customize ["modifyvm", :id, "--name", "ISC_website", "--memory", "1024"]
+    vb.customize ["modifyvm", :id, "--name", "ALCES_tileserver", "--memory", "1024"]
   end
 
   # Shared folder from the host machine to the guest machine. Uncomment the line
   # below to enable it.
-  #config.vm.synced_folder "../../../ISC_website", "/webapps/ISC_websitep/ISC_website"
 	if is_windows
 	  # Provisioning configuration for shell script.
 	  config.vm.provision "shell" do |sh|
