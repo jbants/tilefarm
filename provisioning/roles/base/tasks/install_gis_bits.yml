@@ -1,0 +1,82 @@
+
+- name: Download GEOS v3.4.2.
+  get_url:
+    url: "http://download.osgeo.org/geos/geos-3.4.2.tar.bz2"
+    dest: "/home/{{ primary_user_name }}/geos-3.4.2.tar.bz2"
+
+- name: Expand GEOS archive.
+  unarchive:
+    src: "/home/{{ primary_user_name }}/geos-3.4.2.tar.bz2"
+    dest: /home/{{ primary_user_name }}
+    creates: "/home/{{ primary_user_name }}/geos-3.4.2/README"
+    copy: no
+
+- name: Build GEOS
+  shell: 'cd /home/{{ primary_user_name }}/geos-3.4.2; {{ item }}'
+  with_items:
+    - ./configure
+    - make
+    - make install
+  become: yes
+  become_user: root      
+
+- name: Download PROJ4 v4.9.1.
+  get_url:
+    url: "http://download.osgeo.org/proj/proj-4.9.1.tar.gz"
+    dest: "/home/{{ primary_user_name }}/proj-4.9.1.tar.gz"
+
+- name: Expand PROJ4 archive.
+  unarchive:
+    src: "/home/{{ primary_user_name }}/proj-4.9.1.tar.gz"
+    dest: "/home/{{ primary_user_name }}"
+    creates: "/home/{{ primary_user_name }}/proj-4.9.1/README"
+    copy: no
+
+- name: Download PROJ4 - Datum Shift V1.5.
+  get_url:
+    url: "http://download.osgeo.org/proj/proj-datumgrid-1.5.tar.gz"
+    dest: "/home/{{ primary_user_name }}/proj-datumgrid-1.5.tar.gz"
+
+# extract dataumshift libraries oin proj4 nad folder as per django instructions
+- name: Expand PROJ4 - Datum Shift archive.
+  unarchive:
+    src: "/home/{{ primary_user_name }}/proj-datumgrid-1.5.tar.gz"
+    dest: "/home/{{ primary_user_name }}/proj-4.9.1/nad"
+    creates: "/home/{{ primary_user_name }}/proj-datumgrid-1.5/README"
+    copy: no
+
+- name: Build PROJ4
+  shell: 'cd /home/{{ primary_user_name }}/proj-4.9.1; {{ item }}'
+  with_items:
+    - ./configure
+    - make
+    - make install
+  become: yes
+  become_user: root  
+
+
+- name: Download GDAL version v2.1.0.
+  get_url:
+    url: "http://download.osgeo.org/gdal/2.1.0/gdal-2.1.0.tar.gz"
+    dest: "/home/{{ primary_user_name }}/gdal-2.1.0.tar.gz"        
+
+- name: Expand GDAL archive.
+  unarchive:
+    src: "/home/{{ primary_user_name }}/gdal-2.1.0.tar.gz" 
+    dest: "/home/{{ primary_user_name }}"
+    creates: "/home/{{ primary_user_name }}/gdal-2.1.0/README"
+    copy: no    
+
+- name: Build GDAL
+  shell: 'cd /home/{{ primary_user_name }}/gdal-2.1.0; {{ item }}'
+  with_items:
+    - ./configure --with-python --with-GEOS
+    - make
+    - make install
+  become: yes
+  become_user: root  
+
+- name: run ld config
+  shell: 'ldconfig'
+  become: yes
+  become_user: root  

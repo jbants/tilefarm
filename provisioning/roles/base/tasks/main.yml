@@ -10,6 +10,50 @@
     - libssl-doc
   tags: packages
 
+# - name: Create a Tiling Configuration Directory
+#   file: path={{ mapping_directory }}/configs 
+#         recurse=yes
+#         state=directory
+#         mode=0775
+#   tags: packages
+
+# - name: Create a Tiling xml Directory
+#   file: path={{ mapping_directory }}/xml
+#         recurse=yes
+#         state=directory
+#         mode=0775
+#   tags: packages
+
+# - name: Create a Tiling cache Directory
+#   file: path={{ mapping_directory }}/cache
+#         recurse=yes
+#         state=directory
+#         mode=0775
+#   tags: packages
+
+# - name: Create a Tiling data Directory
+#   file: path={{ mapping_directory }}/data
+#         recurse=yes
+#         state=directory
+#         mode=0775
+#   tags: packages
+
+# - name: Create a Website Directory
+#   file: path={{ website_directory }}
+#         recurse=yes
+#         state=directory
+#         mode=0775
+#   tags: packages  
+
+# - name: Create a Logs Directory
+#   file: path={{ logs_directory }}
+#         recurse=yes
+#         state=directory
+#         mode=0775
+#   tags: packages  
+
+- include: create_users_and_groups.yml
+
 - name: Install base packages
   apt: name={{ item }} update_cache={{ update_apt_cache }} force=yes state=installed
   with_items:
@@ -26,69 +70,59 @@
     - python-software-properties
     - python-mapnik
     - python-pyproj
-    - python-gdal
-  tags: packages
-
-- name: Create a Tiling Configuration Directory
-  file: path={{ mapping_directory }}/configs 
-        recurse=yes
-        state=directory
-        mode=0775
-  tags: packages
-
-- name: Create a Tiling xml Directory
-  file: path={{ mapping_directory }}/xml
-        recurse=yes
-        state=directory
-        mode=0775
-  tags: packages
-
-- name: Create a Tiling cache Directory
-  file: path={{ mapping_directory }}/cache
-        recurse=yes
-        state=directory
-        mode=0775
-  tags: packages
-
-- name: Create a Tiling data Directory
-  file: path={{ mapping_directory }}/data
-        recurse=yes
-        state=directory
-        mode=0775
-  tags: packages
-
-- name: Create a Website Directory
-  file: path={{ website_directory }}
-        recurse=yes
-        state=directory
-        mode=0775
-  tags: packages  
-
-- name: Create a Logs Directory
-  file: path={{ logs_directory }}
-        recurse=yes
-        state=directory
-        mode=0775
-  tags: packages  
 
 - name: install virtual env and numpy
   pip: name={{ item }}
   with_items:
     - numpy
+    - mapnik
     - virtualenv
     - virtualenvwrapper
 
-- name: Create the virtualenv
-  command: virtualenv "{{ virtualenv_path }}" --system-site-packages
-           creates="{{ virtualenv_path }}"/bin/activate
+- include: install_gis_bits.yml
 
-- include: create_users_and_groups.yml
-
-- name: Update bashrc for user
+  tags: packages
+- name: Update bashrc for the application user
   lineinfile:
-    dest="/home/{{ application_name }}/.bashrc"
+    dest="/home/{{ application_user_name }}/.bashrc"
     line="export WORKON_HOME=/virtualenv/ && source /usr/local/bin/virtualenvwrapper.sh"
-    owner="{{ application_name }}"
+    owner="{{ application_user_name }}"
     state=present
     insertafter=EOF
     create=True
+
+- name: Update bashrc for the primary user
+  lineinfile:
+    dest="/home/{{ primary_user_name }}/.bashrc"
+    line="export WORKON_HOME=/virtualenv/ && source /usr/local/bin/virtualenvwrapper.sh"
+    owner="{{ primary_user_name }}"
+    state=present
+    insertafter=EOF
+    create=True    
+
+- name: Make virtualenv folder accessible to {{ application_group }}
+  file:
+    path: "/virtualenv"
+    state: directory
+    owner: "{{ application_user_name }}"
+    group: "{{ application_group }}"
+    mode: 0775
+  become: yes
+  become_user: root      
+
+- name: Create the virtualenv
+  become: yes
+  become_user: "{{ application_user_name }}"
+  command: virtualenv "{{ virtualenv_path }}" --system-site-packages
+           creates="{{ virtualenv_path }}"/bin/activate
+
+- name: Make {{ virtualenv_path }} folder accessible to {{ application_group }}
+  file:
+    path: "{{ virtualenv_path }}"
+    state: directory
+    owner: "{{ application_user_name }}"
+    group: "{{ application_group }}"
+    mode: 0775
+    recurse: yes
+  become: yes
+  become_user: root

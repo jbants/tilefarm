@@ -1,21 +1,25 @@
 ---
-
-git_repo: https://github.com/jbants/EasyTileServer.git
+# Standard server setting for all servers
 
 project_name: tilefarm
-application_name: webuser
+
 application_group : webapps
-application_password: $1$SECRET$8UieMQyDdNHSk.VFtoSFY1 #A13c5 see: https://github.com/ansible/ansible/issues/2305
+application_user_name: webuser
+application_user_password: $1$SECRET$8UieMQyDdNHSk.VFtoSFY1 #A13c5 see: https://github.com/ansible/ansible/issues/2305
 
-mapping_directory: "/webapps/tilefarm"
-website_directory: "/webapps/website"
-logs_directory: "/webapps/logs"
+primary_user_name: james
+primary_user_group: application_group
+primary_user_password: $1$SECRET$8UieMQyDdNHSk.VFtoSFY1 #A13c5 see: https://github.com/ansible/ansible/issues/2305
 
-gunicorn_user: "{{ application_name }}"
-gunicorn_password: "{{ application_password }}"
+# mapping_directory: "/webapps/tilefarm"
+# website_directory: "/webapps/website"
+# logs_directory: "/webapps/logs"
+
+# gunicorn_user: "{{ application_name }}"
+# gunicorn_password: "{{ application_password }}"
 
 virtualenv_name: tilefarm
 virtualenv_path: "/virtualenv/{{ virtualenv_name }}"
 
-standard_user: webuser
-standard_pw: A13c5
+# standard_user: webuser
+# standard_pw: A13c5

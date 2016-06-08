@@ -1,18 +1,51 @@
 ---
 
 - name: Create the application user
-  user: name={{ application_name }} password={{ application_password }} state=present shell=/bin/bash
+  user: name="{{ application_user_name }}"
+        password="{{ application_user_password }}"
+        state=present
+        shell=/bin/bash
+  become: yes
+  become_user: root  
 
 - name: Create the application group
-  group: name={{ application_group }} system=yes state=present
-
-- name: Add the application user to the application group
-  user: name={{ application_name }} group={{ application_group }} state=present
+  group: name="{{ application_group }}"
+         state=present
+  become: yes
+  become_user: root  
 
 - name: Create a ssh Directory
-  file: path=/home/{{ application_name }}/.ssh
+  file: path=/home/{{ application_user_name }}/.ssh
         recurse=yes
         state=directory
-        mode=0700
-        owner="{{ application_name }}"
+        mode=0400
+        owner="{{ application_user_name }}"
         group="{{ application_group }}"
+  become: yes
+  become_user: root  
+
+- name: Create the primary user
+  user: name="{{ primary_user_name }}"
+        password="{{ primary_user_password }}"
+        groups=sudo,{{ application_group }}
+        state=present shell=/bin/bash
+  become: yes
+  become_user: root  
+
+- name: Add the primary user to sudoers
+  lineinfile: dest=/etc/sudoers
+              regexp="{{ primary_user_name }} ALL"
+              line="{{ primary_user_name }} ALL=(ALL) ALL"
+              state=present
+  become: yes
+  become_user: root                
+
+- name: Create a ssh Directory
+  file: path=/home/{{ primary_user_name }}/.ssh
+        recurse=yes
+        state=directory
+        mode=0400
+        owner="{{ primary_user_name }}"
+        group="{{ application_group }}"        
+  become: yes
+  become_user: root  

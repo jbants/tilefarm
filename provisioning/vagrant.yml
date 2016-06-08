@@ -1,23 +1,21 @@
 ---
 
-- name: Create a {{ application_name }} virtual machine via vagrant
-  hosts: all
-  sudo: yes
-  sudo_user: root
+- name: Create a {{ project_name }} virtual machine via vagrant
+  hosts: localhost
   remote_user: vagrant # remove if provisioning without vagrant
   vars:
     - setup_git_repo: yes
     - update_apt_cache: yes
   vars_files:
     - env_vars/base.yml
-    - env_vars/vagrant.yml
+    #- env_vars/vagrant.yml
 
   roles:
     - base #checked
-    - db #checked
-    - rabbitmq #checked
-    - tilestache #checked
-    - celery #checked 
-    - web #checked
-    - cleanup
+    # - db #checked
+    # - rabbitmq #checked
+    # - tilestache #checked
+    # - celery #checked 
+    # - web #checked
+    # - cleanup
     #- memcached
